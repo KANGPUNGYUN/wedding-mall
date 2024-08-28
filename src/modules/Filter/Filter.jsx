@@ -17,14 +17,14 @@ export const Filter = () => {
                 <label htmlFor="orderStatus">주문상태</label>
                 <select name="orderStatus" id={styles.orderStatus} >
                     <option value="">전체</option>
-                    <option value="">주문완료</option>
-                    <option value="">포장완료</option>
-                    <option value="">수선접수</option>
-                    <option value="">수선완료</option>
-                    <option value="">배송중</option>
-                    <option value="">배송완료</option>
-                    <option value="">수령완료</option>
-                    <option value="">숙소</option>
+                    <option value="주문완료">주문완료</option>
+                    <option value="포장완료">포장완료</option>
+                    <option value="수선접수">수선접수</option>
+                    <option value="수선완료">수선완료</option>
+                    <option value="배송중">배송중</option>
+                    <option value="배송완료">배송완료</option>
+                    <option value="수령완료">수령완료</option>
+                    <option value="숙소">숙소</option>
                 </select>
             </div>
 

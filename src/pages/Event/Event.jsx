@@ -37,26 +37,30 @@ export const Event = () => {
             <section className={styles.tableWrap}>
               <h2 className={styles.tableTitle}>현재 진행중인 대회 목록</h2>
               <table className={styles.table}>
-                <tr>
-                  <th scope="col">제목</th>
-                  <th scope="col">시작기간</th>
-                  <th scope="col">종료기간</th>
-                  <th scope="col">주문서 작성</th>
-                  <th scope="col">주문서 목록</th>
-                </tr>
-                {currentItems.map((event) => (
+                <thead>
                   <tr>
-                    <td>{event.title}</td>
-                    <td>{event.start_date}</td>
-                    <td>{event.end_date}</td>
-                    <td>
-                      <Link to={event.new_order} className={styles.link}>주문서 작성</Link>
-                    </td>
-                    <td>
-                      <Link to={event.order_list} className={styles.link}>주문서 목록 이동</Link>
-                    </td>
+                    <th scope="col">제목</th>
+                    <th scope="col">시작기간</th>
+                    <th scope="col">종료기간</th>
+                    <th scope="col">주문서 작성</th>
+                    <th scope="col">주문서 목록</th>
                   </tr>
-                ))}
+                </thead>
+                <tbody>
+                  {currentItems.map((event) => (
+                    <tr key={event.id}>
+                      <td>{event.title}</td>
+                      <td>{event.start_date}</td>
+                      <td>{event.end_date}</td>
+                      <td>
+                        <Link to={event.new_order} className={styles.link}>주문서 작성</Link>
+                      </td>
+                      <td>
+                        <Link to={event.order_list} className={styles.link}>주문서 목록 이동</Link>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
               </table>
               <Pagination
                 className={styles.pagination}

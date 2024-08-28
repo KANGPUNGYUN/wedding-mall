@@ -3,6 +3,7 @@ import styles from "./OrderList.module.css"
 import { Filter, Pagination, Tab } from "../../../modules"
 import { Button, Link } from "../../../components"
 import { useParams } from "react-router-dom";
+import { ReactComponent as LeftArrow } from '../../../asset/icon/left_small.svg'
 
 export const OrderList = () => {
   let { event_id } = useParams();
@@ -30,8 +31,8 @@ export const OrderList = () => {
     }
   }
 
-  const eventList = useRef(Array.from({ length: 24 }, (_, i) => generateRandomOrder(i + 1))).current
-  const draftList = useRef(Array.from({ length: 3 }, (_, i) => generateRandomOrder(i + 1))).current
+  const [orders, setOrders] = useState(Array.from({ length: 24 }, (_, i) => generateRandomOrder(i + 1)))
+  const [drafts, setDrafts] = useState(Array.from({ length: 3 }, (_, i) => generateRandomOrder(i + 1)))
 
   const handleOrderPageChange = (page) => {
     setOrderCurrentPage(page)
@@ -46,6 +47,19 @@ export const OrderList = () => {
       key,
       direction: prevConfig.key === key && prevConfig.direction === 'asc' ? 'desc' : 'asc'
     }))
+  }, [])
+
+  const handleOrderStatusChange = useCallback((id, newStatus, isDraft = false) => {
+    const updateOrders = (prevOrders) =>
+      prevOrders.map(order => 
+        order.id === id ? { ...order, order_status: newStatus } : order
+      )
+    
+    if (isDraft) {
+      setDrafts(updateOrders)
+    } else {
+      setOrders(updateOrders)
+    }
   }, [])
 
   const sortItems = (items) => {
@@ -63,7 +77,7 @@ export const OrderList = () => {
     return items;
   }
 
-  const renderTable = (items) => (
+  const renderTable = (items, isDraft = false) => (
     <table className={styles.table}>
       <thead>
         <tr>
@@ -94,6 +108,7 @@ export const OrderList = () => {
                 id={`order_${order.id}`} 
                 className={styles.orderStatus}
                 value={order.order_status}
+                onChange={(e) => handleOrderStatusChange(order.id, e.target.value, isDraft)}
               >
                 <option value="주문완료">주문완료</option>
                 <option value="포장완료">포장완료</option>
@@ -116,8 +131,8 @@ export const OrderList = () => {
     </table>
   )
 
-  const sortedEventList = sortItems(eventList)
-  const sortedDraftList = sortItems(draftList)
+  const sortedEventList = sortItems(orders)
+  const sortedDraftList = sortItems(drafts)
 
   const indexOfLastOrderItem = orderCurrentPage * itemsPerPage
   const indexOfFirstOrderItem = indexOfLastOrderItem - itemsPerPage
@@ -131,7 +146,10 @@ export const OrderList = () => {
     <>
       <div className={styles.orderListTableBackground}>
         <section className={styles.tableWrap}>
-          <h2 className={styles.tableTitle}>{`[202${event_id}년 축복식] 주문서 목록`}</h2>
+          <div className={styles.tableTitleWrap}>
+            <Link to="/event"><LeftArrow /></Link>
+            <h2 className={styles.tableTitle}>{`[202${event_id}년 축복식] 주문서 목록`}</h2>
+          </div>
           <Tab defaultActiveTab="tab1">
             <Tab.TabPane name="tab1" tab="주문서 목록">
               <Filter />
@@ -143,7 +161,7 @@ export const OrderList = () => {
               <Pagination
                 className={styles.pagination}
                 currentPage={orderCurrentPage}
-                totalItems={eventList.length}
+                totalItems={orders.length}
                 itemsPerPage={itemsPerPage}
                 onPageChange={handleOrderPageChange}
               />
@@ -152,13 +170,13 @@ export const OrderList = () => {
               <Filter />
               <div className={styles.actionButtonsWrap}>
                 <Button label="Excel 저장" className={styles.excelButton} />
-                <Button label="주문서 작성" className={styles.newOrderButton}/>
+                <Link to={`/event/${event_id}/create`} className={styles.newOrderLink}>주문서 작성</Link>
               </div>
-              {renderTable(currentDraftItems)}
+              {renderTable(currentDraftItems, true)}
               <Pagination
                 className={styles.pagination}
                 currentPage={draftCurrentPage}
-                totalItems={draftList.length}
+                totalItems={drafts.length}
                 itemsPerPage={itemsPerPage}
                 onPageChange={handleDraftPageChange}
               />

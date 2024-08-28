@@ -1,10 +1,11 @@
 .orderListTableBackground {
     width: 100vw;
     min-height: 700px;
-    height: 100vh;
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
+    margin: 60px 0;
 }
 
 .tableWrap {
@@ -13,6 +14,11 @@
     justify-content: space-around;
     padding: 24px;
     width: 1000px;
+}
+
+.tableTitleWrap {
+    display: flex;
+    gap: 10px;
 }
 
 .tableTitle {
