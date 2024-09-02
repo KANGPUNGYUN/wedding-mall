@@ -2,11 +2,12 @@ import React, { useRef, useState, useCallback } from 'react'
 import styles from "./OrderList.module.css"
 import { Filter, Pagination, Tab } from "../../../modules"
 import { Button, Link } from "../../../components"
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { ReactComponent as LeftArrow } from '../../../asset/icon/left_small.svg'
 
 export const OrderList = () => {
   let { event_id } = useParams();
+  const navigate = useNavigate();
 
   const [orderCurrentPage, setOrderCurrentPage] = useState(1)
   const [draftCurrentPage, setDraftCurrentPage] = useState(1)
@@ -77,6 +78,10 @@ export const OrderList = () => {
     return items;
   }
 
+  const handleRowClick = (order) => {
+    navigate(`/event/${event_id}/${order.id}`)
+  }
+
   const renderTable = (items, isDraft = false) => (
     <table className={styles.table}>
       <thead>
@@ -97,7 +102,7 @@ export const OrderList = () => {
       </thead>
       <tbody>
         {items.map((order) => (
-          <tr key={order.id}>
+          <tr key={order.id} onClick={()=> handleRowClick(order)} className={styles.orderLink}>
             <td>{order.writer}</td>
             <td>{order.customer}</td>
             <td>{order.relation}</td>
@@ -148,7 +153,7 @@ export const OrderList = () => {
         <section className={styles.tableWrap}>
           <div className={styles.tableTitleWrap}>
             <Link to="/event"><LeftArrow /></Link>
-            <h2 className={styles.tableTitle}>{`[202${event_id}년 축복식] 주문서 목록`}</h2>
+            <h2 className={styles.tableTitle}>{`[202${event_id}년 행사] 주문서 목록`}</h2>
           </div>
           <Tab defaultActiveTab="tab1">
             <Tab.TabPane name="tab1" tab="주문서 목록">

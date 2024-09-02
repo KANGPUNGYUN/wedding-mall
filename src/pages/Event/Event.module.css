@@ -52,3 +52,9 @@
     justify-content: center;
     align-items: center;
 }
+
+.loadingMessageWrap {
+    border: 1px solid #dedfe6;
+    padding: 16px 6px;
+    text-align: center;
+}

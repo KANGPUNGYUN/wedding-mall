@@ -93,3 +93,7 @@
 .table tr:nth-child(odd) td{
     background-color: white;
 }
+
+.orderLink {
+    cursor: pointer;
+}
